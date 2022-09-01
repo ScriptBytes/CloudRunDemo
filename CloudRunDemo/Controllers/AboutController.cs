@@ -12,5 +12,11 @@ namespace CloudRunDemo.Controllers
         {
             return "Like and subscribe!!!";
         }
+        
+        [HttpGet("testing", Name = "Testing")]
+        public string Testing()
+        {
+            return "The TESTING env is: " + Environment.GetEnvironmentVariable("TESTING");
+        }
     }
 }
