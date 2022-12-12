@@ -1,7 +1,7 @@
 steps:
   - name: 'gcr.io/kaniko-project/executor:latest'
     args:
-      - --destination=$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME
+      - --destination=gcr.io/$PROJECT_ID/$_SERVICE_NAME
       - --cache=true
       - --cache-ttl=6h
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
@@ -10,7 +10,7 @@ steps:
       - deploy
       - $_SERVICE_NAME
       - '--image'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME'
       - '--region'
       - $_DEPLOY_REGION
       - '--platform'
