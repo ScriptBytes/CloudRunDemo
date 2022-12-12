@@ -1,19 +1,26 @@
 steps:
-  - name: 'gcr.io/kaniko-project/executor:latest'
+  - name: gcr.io/cloud-builders/docker
     args:
-      - --destination=gcr.io/$PROJECT_ID/$_SERVICE_NAME
-      - --cache=true
-      - --cache-ttl=6h
+      - build
+      - '-t'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+      - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     args:
       - run
       - deploy
       - $_SERVICE_NAME
       - '--image'
-      - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
       - '--region'
       - $_DEPLOY_REGION
       - '--platform'
       - $_PLATFORM
     entrypoint: gcloud
 timeout: 1200s
+images:
+  - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
